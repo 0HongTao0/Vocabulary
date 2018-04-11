@@ -1,4 +1,4 @@
-package com.sid.vocabulary.common;
+package com.sid.vocabulary;
 
 import android.app.Application;
 import android.content.Context;
@@ -12,17 +12,21 @@ import android.content.Context;
  */
 
 public final class VocabularyApplication extends Application {
+    private static Context sContext;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        sContext = getApplicationContext();
+        UserManager.getInstance().setUserId("666666");
+        AppDaoManager.getInstance().init();
     }
 
     /**
      * 得到 App 的 Context（全局通用）
      * @return
      */
-    public static Context getAppContext(){
-        return getAppContext();
+    public static Context getContext(){
+        return sContext;
     }
 }
