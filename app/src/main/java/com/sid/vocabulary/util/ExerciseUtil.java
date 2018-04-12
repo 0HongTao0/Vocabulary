@@ -66,4 +66,15 @@ public class ExerciseUtil {
         }
         return daoObjectList;
     }
+
+    public static ExerciseDaoObject converseToExerciseDaoObject(Exercise exercise) {
+        ExerciseDaoObject exerciseDaoObject = new ExerciseDaoObject();
+        exerciseDaoObject.setWord(exercise.getWord());
+        exerciseDaoObject.setRightTranslation(exercise.getTranslation());
+        exerciseDaoObject.setWordId(exercise.getWordId());
+        exerciseDaoObject.setWrongTranslation1(exercise.getWrongTranslation().get(0));
+        exerciseDaoObject.setWrongTranslation2(exercise.getWrongTranslation().get(1));
+        exerciseDaoObject.setWrongTranslation3(exercise.getWrongTranslation().get(2));
+        return exerciseDaoObject;
+    }
 }

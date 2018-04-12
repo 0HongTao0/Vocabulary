@@ -5,6 +5,8 @@ import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.NotNull;
 import org.greenrobot.greendao.annotation.Generated;
 
+import java.util.Date;
+
 /**
  * Created 2018/4/11.
  *
@@ -27,11 +29,16 @@ public class ExerciseDaoObject {
     @NotNull
     private String wrongTranslation3;
 
+    private Date correctDate;
 
-    @Generated(hash = 896733395)
+    private String correctDateString;
+
+
+    @Generated(hash = 396237508)
     public ExerciseDaoObject(Long _id, int wordId, @NotNull String word,
             @NotNull String rightTranslation, @NotNull String wrongTranslation1,
-            @NotNull String wrongTranslation2, @NotNull String wrongTranslation3) {
+            @NotNull String wrongTranslation2, @NotNull String wrongTranslation3, Date correctDate,
+            String correctDateString) {
         this._id = _id;
         this.wordId = wordId;
         this.word = word;
@@ -39,12 +46,14 @@ public class ExerciseDaoObject {
         this.wrongTranslation1 = wrongTranslation1;
         this.wrongTranslation2 = wrongTranslation2;
         this.wrongTranslation3 = wrongTranslation3;
+        this.correctDate = correctDate;
+        this.correctDateString = correctDateString;
     }
 
     @Generated(hash = 1527838637)
     public ExerciseDaoObject() {
     }
-    
+
 
     public Long get_id() {
         return _id;
@@ -100,5 +109,21 @@ public class ExerciseDaoObject {
 
     public void setWordId(int wordId) {
         this.wordId = wordId;
+    }
+
+    public Date getCorrectDate() {
+        return correctDate;
+    }
+
+    public void setCorrectDate(Date correctDate) {
+        this.correctDate = correctDate;
+    }
+
+    public String getCorrectDateString() {
+        return correctDateString;
+    }
+
+    public void setCorrectDateString(String correctDateString) {
+        this.correctDateString = correctDateString;
     }
 }

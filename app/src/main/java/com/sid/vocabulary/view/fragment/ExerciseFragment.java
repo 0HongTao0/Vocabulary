@@ -21,6 +21,7 @@ import com.sid.vocabulary.util.ExerciseUtil;
 import com.sid.vocabulary.util.JSONUtil;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -112,7 +113,7 @@ public class ExerciseFragment extends BaseFragment {
                 });
     }
 
-    private void updateView(Exercise exercise) {
+    private void updateView(final Exercise exercise) {
         mTvNum.setText("已练习:" + String.valueOf(UserManager.getInstance().getDaoId() - 1));
         mTvTarget.setText(exercise.getWord());
         ExerciseRvAdapter exerciseRvAdapter = new ExerciseRvAdapter(ExerciseUtil.getExerciseItemList(exercise));
@@ -128,6 +129,8 @@ public class ExerciseFragment extends BaseFragment {
             public void onItemClick(ExerciseItem exerciseItem, boolean isCorrect) {
                 Log.d(TAG, "onItemClick: " + exerciseItem.getTranslation() + isCorrect);
                 if (isCorrect) {
+                    ExerciseManager.getInstance().correctTheExerciseTimeInDB(exercise, mDaoId);
+                    Log.d(TAG, "onItemClick: check " + ExerciseManager.getInstance().getExerciseDaoObjectsByDate(new Date()));
                     mDaoId++;
                     UserManager.getInstance().setDaoId(mDaoId);
                     ExerciseDaoObject exerciseDaoObject = ExerciseManager.getInstance().getExerciseDaoObject(mDaoId);
