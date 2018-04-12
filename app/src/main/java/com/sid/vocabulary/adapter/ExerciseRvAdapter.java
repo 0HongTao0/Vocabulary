@@ -52,7 +52,7 @@ public class ExerciseRvAdapter extends RecyclerView.Adapter<ExerciseRvAdapter.Ex
     @Override
     public void onBindViewHolder(ExerciseRvViewHolder holder, int position) {
         ExerciseItem exerciseItem = mExerciseItemList.get(position);
-        holder.mTextView.setText(exerciseItem.getTranslation());
+        holder.mTextView.setText(exerciseItem.getTranslation().replaceAll("\n",""));
     }
 
     @Override

@@ -15,15 +15,15 @@ import com.sid.vocabulary.adapter.ExerciseRvAdapter;
 import com.sid.vocabulary.api.ExerciseApi;
 import com.sid.vocabulary.base.BaseFragment;
 import com.sid.vocabulary.bean.Exercise;
+import com.sid.vocabulary.bean.ExerciseDaoObject;
 import com.sid.vocabulary.bean.ExerciseItem;
 import com.sid.vocabulary.util.ExerciseUtil;
 import com.sid.vocabulary.util.JSONUtil;
 
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.Unbinder;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -41,9 +41,11 @@ public class ExerciseFragment extends BaseFragment {
     TextView mTvTarget;
     @BindView(R.id.exercise_rv_translation)
     RecyclerView mRvTranslation;
-    Unbinder unbinder;
+    @BindView(R.id.exercise_tv_num)
+    TextView mTvNum;
 
-    private List<Exercise> mExerciseList = new ArrayList<>();
+    private long mDaoId;
+
 
     public static ExerciseFragment newInstance() {
 
@@ -61,14 +63,27 @@ public class ExerciseFragment extends BaseFragment {
 
     @Override
     protected void init(Bundle savedInstanceState) {
-        initData();
+        mDaoId = UserManager.getInstance().getDaoId();
+        if (null == ExerciseManager.getInstance().getExerciseDaoObject(mDaoId)) {
+            getData();
+        } else {
+            Log.d(TAG, "init: mDaoId = " + mDaoId);
+            ExerciseDaoObject exerciseDaoObject = ExerciseManager.getInstance().getExerciseDaoObject(mDaoId);
+            updateView(ExerciseUtil.converseToExercise(exerciseDaoObject));
+        }
     }
 
-    private void initData() {
+    private void getData() {
         Observable.create(new Observable.OnSubscribe<List<Exercise>>() {
             @Override
             public void call(Subscriber<? super List<Exercise>> subscriber) {
-                String data = ExerciseApi.getWordInEnglishApi(UserManager.getInstance().getUserId(), UserManager.getInstance().getWordNum());
+                String data = null;
+                try {
+                    data = ExerciseApi.getWordInEnglishApi(UserManager.getInstance().getUserId(), UserManager.getInstance().getWordNum());
+                } catch (IOException e) {
+                    subscriber.onNext(null);
+                    e.printStackTrace();
+                }
                 Log.d(TAG, "call: " + data);
                 Gson gson = new Gson();
                 List<Exercise> exerciseList = gson.fromJson(JSONUtil.getString(data, "data", ""), new TypeToken<List<Exercise>>() {
@@ -91,17 +106,16 @@ public class ExerciseFragment extends BaseFragment {
                     @Override
                     public void onNext(List<Exercise> exercises) {
                         ExerciseManager.getInstance().insertExerciseDaoObjectList(ExerciseUtil.converseToExerciseDaoObject(exercises));
-                        Log.d(TAG, "onNext: " + ExerciseManager.getInstance().getExerciseDaoObject(1).getWord());
-//                        ExerciseManager.getInstance().insertExerciseDaoObjectList();
-//                        mExerciseList.addAll(exercises);
-//                        mTvTarget.setText(exercises.get(0).getWord());
-//                        updateView(ExerciseUtil.getExerciseItemList(exercises.get(0)));
+                        ExerciseDaoObject exerciseDaoObject = ExerciseManager.getInstance().getExerciseDaoObject(mDaoId);
+                        updateView(ExerciseUtil.converseToExercise(exerciseDaoObject));
                     }
                 });
     }
 
-    private void updateView(List<ExerciseItem> exerciseItemList) {
-        ExerciseRvAdapter exerciseRvAdapter = new ExerciseRvAdapter(exerciseItemList);
+    private void updateView(Exercise exercise) {
+        mTvNum.setText("已练习:" + String.valueOf(UserManager.getInstance().getDaoId() - 1));
+        mTvTarget.setText(exercise.getWord());
+        ExerciseRvAdapter exerciseRvAdapter = new ExerciseRvAdapter(ExerciseUtil.getExerciseItemList(exercise));
         mRvTranslation.setAdapter(exerciseRvAdapter);
         mRvTranslation.setLayoutManager(new LinearLayoutManager(getContext()) {
             @Override
@@ -113,6 +127,16 @@ public class ExerciseFragment extends BaseFragment {
             @Override
             public void onItemClick(ExerciseItem exerciseItem, boolean isCorrect) {
                 Log.d(TAG, "onItemClick: " + exerciseItem.getTranslation() + isCorrect);
+                if (isCorrect) {
+                    mDaoId++;
+                    UserManager.getInstance().setDaoId(mDaoId);
+                    ExerciseDaoObject exerciseDaoObject = ExerciseManager.getInstance().getExerciseDaoObject(mDaoId);
+                    if (null == exerciseDaoObject) {
+                        getData();
+                    } else {
+                        updateView(ExerciseUtil.converseToExercise(exerciseDaoObject));
+                    }
+                }
             }
         });
     }
