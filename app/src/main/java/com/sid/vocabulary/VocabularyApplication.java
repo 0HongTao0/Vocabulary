@@ -48,7 +48,7 @@ public final class VocabularyApplication extends Application {
 
     private void loginVocabulary() {
         String userId = UserManager.getInstance().getUserId().equals("") ? String.valueOf((int) ((Math.random() * 9 + 1) * 100000)) : UserManager.getInstance().getUserId();
-        int wordNum = UserManager.getInstance().getWordNum() == -1 ? 1 : UserManager.getInstance().getWordNum();
+        int wordNum = UserManager.getInstance().getWordNum() == -1 ? 50 : UserManager.getInstance().getWordNum();
         long daoId = UserManager.getInstance().getDaoId() == -1 ? 1 : UserManager.getInstance().getDaoId();
         UserManager.getInstance().onUserLogin(userId, wordNum, daoId);
         Log.d(TAG, "loginVocabulary: wordNum = " + UserManager.getInstance().getWordNum());

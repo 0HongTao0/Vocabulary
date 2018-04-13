@@ -1,12 +1,9 @@
 <resources>
     <string name="app_name">WTE 词汇</string>
 
-    <string name="sign">签到</string>
-    <string name="sign_succeed_today">今日签到成功，增加积分</string>
-    <string name="sure">确定</string>
-    <string name="have_signed">已签到</string>
-    <string name="much_score_int">%1$d 分</string>
-    <string name="you_have_sign">当月你签到的天数</string>
+
+    <string name="you_have_sign">当月你打卡的天数</string>
+    <string name="sign_tip">当天完成 100 个词汇练习即可打卡</string>
     <string name="refresh">刷新</string>
 
     <string-array name="month_array">
