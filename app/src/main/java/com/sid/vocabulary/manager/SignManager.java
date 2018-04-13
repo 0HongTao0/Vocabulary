@@ -41,12 +41,6 @@ public class SignManager {
         signDate.setYear(calendar.get(Calendar.YEAR));
         signDate.setSign(isSign);
         mSignDateDao.insertOrReplace(signDate);
-        SignDate signDate1 = new SignDate();
-        signDate1.setDay(calendar.get(Calendar.DATE) - 1);
-        signDate1.setMonth(calendar.get(Calendar.MONTH));
-        signDate1.setYear(calendar.get(Calendar.YEAR));
-        signDate1.setSign(isSign);
-        mSignDateDao.insertOrReplace(signDate1);
         Log.d(TAG, "insertSignDate: " + calendar.get(Calendar.YEAR) + calendar.get(Calendar.MONTH) + calendar.get(Calendar.DATE) + "   have sign");
     }
 
@@ -54,6 +48,15 @@ public class SignManager {
         return mSignDateDao.queryBuilder()
                 .where(SignDateDao.Properties.Year.eq(year), SignDateDao.Properties.Month.eq(month))
                 .list();
+    }
+
+    public boolean isDateSign(Calendar calendar) {
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int date = calendar.get(Calendar.DATE);
+        List<SignDate> signDates = mSignDateDao.queryBuilder().
+                where(SignDateDao.Properties.Year.eq(year), SignDateDao.Properties.Month.eq(month), SignDateDao.Properties.Day.eq(date)).list();
+        return signDates.size() != 0;
     }
 
 }

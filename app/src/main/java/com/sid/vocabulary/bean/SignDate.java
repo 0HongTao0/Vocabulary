@@ -1,9 +1,8 @@
 package com.sid.vocabulary.bean;
 
 import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Id;
-import org.greenrobot.greendao.annotation.NotNull;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.NotNull;
 
 /**
  * Created 2018/4/13.
@@ -12,8 +11,6 @@ import org.greenrobot.greendao.annotation.Generated;
  */
 @Entity
 public class SignDate {
-    @Id(autoincrement = true)
-    private long _id;
     @NotNull
     private int year;
     @NotNull
@@ -24,9 +21,10 @@ public class SignDate {
     private boolean isSign;
 
 
-    @Generated(hash = 601500230)
-    public SignDate(long _id, int year, int month, int day, boolean isSign) {
-        this._id = _id;
+
+
+    @Generated(hash = 1674040653)
+    public SignDate(int year, int month, int day, boolean isSign) {
         this.year = year;
         this.month = month;
         this.day = day;
@@ -36,6 +34,8 @@ public class SignDate {
     @Generated(hash = 349017852)
     public SignDate() {
     }
+
+
     
 
     public boolean isSign() {
@@ -78,11 +78,4 @@ public class SignDate {
         this.isSign = isSign;
     }
 
-    public long get_id() {
-        return this._id;
-    }
-
-    public void set_id(long _id) {
-        this._id = _id;
-    }
 }

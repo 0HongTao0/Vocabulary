@@ -27,7 +27,6 @@ import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.Unbinder;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -48,13 +47,14 @@ public class ExerciseFragment extends BaseFragment {
     @BindView(R.id.exercise_tv_num)
     TextView mTvNum;
 
-    private static final int CAN_SIGN_CORRECT_NUM = 5;
+    private static final int CAN_SIGN_CORRECT_NUM = 100;
     @BindView(R.id.exercise_tv_today_num)
     TextView mTvTodayNum;
-    Unbinder unbinder;
+
 
     private long mDaoId;
     private int correctWord = -1;
+    private boolean isDateSign = SignManager.getInstance().isDateSign(Calendar.getInstance());
 
 
     public static ExerciseFragment newInstance() {
@@ -149,9 +149,9 @@ public class ExerciseFragment extends BaseFragment {
                     } else {
                         updateView(ExerciseUtil.converseToExercise(exerciseDaoObject));
                     }
-
-                    if (checkCanSign(new Date())) {
+                    if (checkCanSign(new Date()) && !isDateSign) {
                         SignManager.getInstance().insertSignDate(Calendar.getInstance(), true);
+                        isDateSign = true;
                     }
                 }
             }
@@ -161,7 +161,7 @@ public class ExerciseFragment extends BaseFragment {
     private boolean checkCanSign(Date date) {
         if (correctWord == -1) {
             correctWord = ExerciseManager.getInstance().getExerciseDaoObjectsByDate(date).size();
-        }else {
+        } else {
             correctWord++;
         }
         if (correctWord >= CAN_SIGN_CORRECT_NUM) {
