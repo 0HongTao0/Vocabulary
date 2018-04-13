@@ -1,22 +1,27 @@
 package com.sid.vocabulary.view.fragment;
 
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Rect;
 import android.os.Bundle;
+import android.text.Html;
+import android.util.Log;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.sid.vocabulary.R;
 import com.sid.vocabulary.base.BaseFragment;
+import com.sid.vocabulary.bean.SignDate;
+import com.sid.vocabulary.manager.SignManager;
+import com.sid.vocabulary.signview.SignAdapter;
+import com.sid.vocabulary.signview.SignEntity;
+import com.sid.vocabulary.signview.SignView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
-import cn.aigestudio.datepicker.bizs.calendars.DPCManager;
-import cn.aigestudio.datepicker.bizs.decors.DPDecor;
-import cn.aigestudio.datepicker.cons.DPMode;
-import cn.aigestudio.datepicker.views.DatePicker;
+import butterknife.OnClick;
+import butterknife.Unbinder;
 
 /**
  * Created 2018/4/10.
@@ -26,8 +31,25 @@ import cn.aigestudio.datepicker.views.DatePicker;
 
 public class PunchFragment extends BaseFragment {
     private static final String TAG = PunchFragment.class.getSimpleName();
-    @BindView(R.id.punch_dp_calender)
-    DatePicker mDpCalender;
+    @BindView(R.id.punch_tv_main_day)
+    TextView mTvMainDay;
+    @BindView(R.id.punch_tv_day_sum)
+    TextView mTvDaySum;
+    @BindView(R.id.punch_tv_year)
+    TextView mTvYear;
+    @BindView(R.id.punch_tv_month)
+    TextView mTvMonth;
+    @BindView(R.id.punch_btn_sign)
+    Button mBtnSign;
+    @BindView(R.id.punch_ll_date)
+    LinearLayout mLlDate;
+    @BindView(R.id.punch_cv_calendar)
+    SignView mCvCalendar;
+    Unbinder unbinder;
+
+
+    private List<SignEntity> data;
+
 
     public static PunchFragment newInstance() {
 
@@ -45,23 +67,50 @@ public class PunchFragment extends BaseFragment {
 
     @Override
     protected void init(Bundle savedInstanceState) {
-        initPunchCalender();
+        onReady();
     }
 
-    private void initPunchCalender() {
-        mDpCalender.setDate(2018, 4);
-        List<String> tmp = new ArrayList<>();
-        tmp.add("2018-4-1");
-        tmp.add("2018-4-8");
-        tmp.add("2018-4-16");
-        DPCManager.getInstance().setDecorBG(tmp);
-        mDpCalender.setMode(DPMode.NONE);
-        mDpCalender.setDPDecor(new DPDecor() {
-            @Override
-            public void drawDecorBG(Canvas canvas, Rect rect, Paint paint) {
-                paint.setColor(Color.GREEN);
-                canvas.drawCircle(rect.centerX(), rect.centerY(), rect.width() / 2F, paint);
+    private void onReady() {
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int dayOfMonthToday = calendar.get(Calendar.DAY_OF_MONTH);
+
+        List<SignDate> signDates = SignManager.getInstance().getSignDate(year, month);
+
+        mTvMainDay.setText(Html.fromHtml(getString(R.string.you_have_sign)));
+        mTvDaySum.setText(String.valueOf(signDates.size()));
+        mTvYear.setText(String.valueOf(year));
+        mTvMonth.setText(getResources().getStringArray(R.array.month_array)[month]);
+
+        data = new ArrayList<>();
+        for (int i = 1; i <= dayOfMonthToday; i++) {
+            SignEntity signEntity = new SignEntity();
+            if (i == dayOfMonthToday) {
+                signEntity.setDayType(2);
+            }else {
+                signEntity.setDayType(1);
             }
-        });
+            for (int j = 0; j < signDates.size(); j++) {
+                if (signDates.get(j).getDay() == i) {
+                    signEntity.setDayType(0);
+                    break;
+                } else if (dayOfMonthToday == i) {
+                    signEntity.setDayType(2);
+                } else {
+                    signEntity.setDayType(1);
+                }
+            }
+            data.add(signEntity);
+        }
+        SignAdapter signAdapter = new SignAdapter(data);
+        mCvCalendar.setAdapter(signAdapter);
     }
+
+    @OnClick(R.id.punch_btn_sign)
+    public void onViewClicked() {
+        onReady();
+        Log.d(TAG, "onClick: refresh the sign sum and calender");
+    }
+
 }

@@ -1,4 +1,4 @@
-package com.sid.vocabulary;
+package com.sid.vocabulary.manager;
 
 import android.util.Log;
 

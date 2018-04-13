@@ -1,18 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context="com.sid.vocabulary.view.activity.HomeActivity">
 
-    <cn.aigestudio.datepicker.views.DatePicker
-        android:id="@+id/punch_dp_calender"
+    <TextView
+        android:id="@+id/punch_tv_main_day"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="24dp"/>
 
-    </cn.aigestudio.datepicker.views.DatePicker>
+    <TextView
+        android:id="@+id/punch_tv_day_sum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="40sp"/>
 
-</android.support.constraint.ConstraintLayout>
+    <LinearLayout
+        android:id="@+id/punch_ll_date"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/colorAccent"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/punch_tv_year"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="24dp"
+            android:textColor="@color/hex_9c9c9c"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/punch_tv_month"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="24dp"
+            android:textColor="@color/hex_9c9c9c"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/punch_btn_sign"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/selector_tv_click_bg"
+            android:text="@string/refresh"
+            android:textColor="@color/gray_black"
+            android:textSize="16sp"/>
+    </LinearLayout>
+
+    <com.sid.vocabulary.signview.SignView
+        android:id="@+id/punch_cv_calendar"
+        android:layout_width="match_parent"
+        android:layout_height="320dp"/>
+</LinearLayout>

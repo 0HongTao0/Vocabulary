@@ -10,9 +10,20 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_gravity="end"
-        android:layout_margin="16dp"
-        android:layout_weight="1"
-        android:gravity="center"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_weight="0.5"
+        android:gravity="bottom"
+        android:textColor="@color/colorPrimaryDark"/>
+
+    <TextView
+        android:id="@+id/exercise_tv_today_num"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_gravity="end"
+        android:layout_marginEnd="16dp"
+        android:layout_weight="0.5"
+        android:gravity="top"
         android:textColor="@color/colorPrimaryDark"/>
 
     <TextView
@@ -20,7 +31,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="center"
-        android:layout_margin="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
         android:layout_weight="3"
         android:gravity="center"
         android:textColor="@color/colorPrimaryDark"
@@ -31,7 +43,8 @@
         android:id="@+id/exercise_rv_translation"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_margin="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
         android:layout_weight="5">
 
     </android.support.v7.widget.RecyclerView>

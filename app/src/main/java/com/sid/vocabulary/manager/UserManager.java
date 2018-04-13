@@ -1,7 +1,9 @@
-package com.sid.vocabulary;
+package com.sid.vocabulary.manager;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
+import com.sid.vocabulary.VocabularyApplication;
 
 /**
  * Created 2018/4/11.

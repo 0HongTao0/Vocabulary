@@ -1,7 +1,8 @@
-package com.sid.vocabulary;
+package com.sid.vocabulary.manager;
 
 import android.util.Log;
 
+import com.sid.vocabulary.VocabularyApplication;
 import com.sid.vocabulary.dao.DaoMaster;
 import com.sid.vocabulary.dao.DaoSession;
 

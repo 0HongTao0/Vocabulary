@@ -8,23 +8,26 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.sid.vocabulary.ExerciseManager;
 import com.sid.vocabulary.R;
-import com.sid.vocabulary.UserManager;
 import com.sid.vocabulary.adapter.ExerciseRvAdapter;
 import com.sid.vocabulary.api.ExerciseApi;
 import com.sid.vocabulary.base.BaseFragment;
 import com.sid.vocabulary.bean.Exercise;
 import com.sid.vocabulary.bean.ExerciseDaoObject;
 import com.sid.vocabulary.bean.ExerciseItem;
+import com.sid.vocabulary.manager.ExerciseManager;
+import com.sid.vocabulary.manager.SignManager;
+import com.sid.vocabulary.manager.UserManager;
 import com.sid.vocabulary.util.ExerciseUtil;
 import com.sid.vocabulary.util.JSONUtil;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.Unbinder;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -45,7 +48,13 @@ public class ExerciseFragment extends BaseFragment {
     @BindView(R.id.exercise_tv_num)
     TextView mTvNum;
 
+    private static final int CAN_SIGN_CORRECT_NUM = 5;
+    @BindView(R.id.exercise_tv_today_num)
+    TextView mTvTodayNum;
+    Unbinder unbinder;
+
     private long mDaoId;
+    private int correctWord = -1;
 
 
     public static ExerciseFragment newInstance() {
@@ -65,6 +74,7 @@ public class ExerciseFragment extends BaseFragment {
     @Override
     protected void init(Bundle savedInstanceState) {
         mDaoId = UserManager.getInstance().getDaoId();
+        checkCanSign(new Date());
         if (null == ExerciseManager.getInstance().getExerciseDaoObject(mDaoId)) {
             getData();
         } else {
@@ -114,7 +124,8 @@ public class ExerciseFragment extends BaseFragment {
     }
 
     private void updateView(final Exercise exercise) {
-        mTvNum.setText("已练习:" + String.valueOf(UserManager.getInstance().getDaoId() - 1));
+        mTvNum.setText("总练习:" + String.valueOf(mDaoId - 1));
+        mTvTodayNum.setText("今天练习:" + correctWord);
         mTvTarget.setText(exercise.getWord());
         ExerciseRvAdapter exerciseRvAdapter = new ExerciseRvAdapter(ExerciseUtil.getExerciseItemList(exercise));
         mRvTranslation.setAdapter(exerciseRvAdapter);
@@ -130,7 +141,6 @@ public class ExerciseFragment extends BaseFragment {
                 Log.d(TAG, "onItemClick: " + exerciseItem.getTranslation() + isCorrect);
                 if (isCorrect) {
                     ExerciseManager.getInstance().correctTheExerciseTimeInDB(exercise, mDaoId);
-                    Log.d(TAG, "onItemClick: check " + ExerciseManager.getInstance().getExerciseDaoObjectsByDate(new Date()));
                     mDaoId++;
                     UserManager.getInstance().setDaoId(mDaoId);
                     ExerciseDaoObject exerciseDaoObject = ExerciseManager.getInstance().getExerciseDaoObject(mDaoId);
@@ -139,8 +149,27 @@ public class ExerciseFragment extends BaseFragment {
                     } else {
                         updateView(ExerciseUtil.converseToExercise(exerciseDaoObject));
                     }
+
+                    if (checkCanSign(new Date())) {
+                        SignManager.getInstance().insertSignDate(Calendar.getInstance(), true);
+                    }
                 }
             }
         });
+    }
+
+    private boolean checkCanSign(Date date) {
+        if (correctWord == -1) {
+            correctWord = ExerciseManager.getInstance().getExerciseDaoObjectsByDate(date).size();
+        }else {
+            correctWord++;
+        }
+        if (correctWord >= CAN_SIGN_CORRECT_NUM) {
+            Log.d(TAG, "checkCanSign: today you can sign the WTE vocabulary.");
+            return true;
+        } else {
+            Log.d(TAG, "checkCanSign: today you can't sign the WTE vocabulary, please exercise the words.");
+            return false;
+        }
     }
 }

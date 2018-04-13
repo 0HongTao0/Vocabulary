@@ -4,6 +4,10 @@ import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
+import com.sid.vocabulary.manager.AppDaoManager;
+import com.sid.vocabulary.manager.UserManager;
+import com.sid.vocabulary.signview.ResolutionUtil;
+
 import okhttp3.OkHttpClient;
 
 /**
@@ -22,6 +26,7 @@ public final class VocabularyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        ResolutionUtil.getInstance().init(this);
         sContext = getApplicationContext();
         sOkHttpClient = new OkHttpClient();
         loginVocabulary();

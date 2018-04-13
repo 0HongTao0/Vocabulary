@@ -17,7 +17,7 @@ public class ExerciseDaoObject {
     @Id(autoincrement = true)
     private Long _id;
     @NotNull
-    int wordId;
+    private int wordId;
     @NotNull
     private String word;
     @NotNull
@@ -36,9 +36,9 @@ public class ExerciseDaoObject {
 
     @Generated(hash = 396237508)
     public ExerciseDaoObject(Long _id, int wordId, @NotNull String word,
-            @NotNull String rightTranslation, @NotNull String wrongTranslation1,
-            @NotNull String wrongTranslation2, @NotNull String wrongTranslation3, Date correctDate,
-            String correctDateString) {
+                             @NotNull String rightTranslation, @NotNull String wrongTranslation1,
+                             @NotNull String wrongTranslation2, @NotNull String wrongTranslation3, Date correctDate,
+                             String correctDateString) {
         this._id = _id;
         this.wordId = wordId;
         this.word = word;
