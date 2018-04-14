@@ -10,7 +10,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.sid.vocabulary.R;
 import com.sid.vocabulary.adapter.ExerciseRvAdapter;
-import com.sid.vocabulary.api.ExerciseApi;
+import com.sid.vocabulary.api.VocabularyApi;
 import com.sid.vocabulary.base.BaseFragment;
 import com.sid.vocabulary.bean.Exercise;
 import com.sid.vocabulary.bean.ExerciseDaoObject;
@@ -90,8 +90,9 @@ public class ExerciseFragment extends BaseFragment {
             public void call(Subscriber<? super List<Exercise>> subscriber) {
                 String data = null;
                 try {
-                    data = ExerciseApi.getWordInEnglishApi(UserManager.getInstance().getUserId(), UserManager.getInstance().getWordNum());
+                    data = VocabularyApi.getWordInEnglishApi(UserManager.getInstance().getUserId(), UserManager.getInstance().getWordNum());
                 } catch (IOException e) {
+                    showToast("网络错误");
                     subscriber.onNext(null);
                     e.printStackTrace();
                 }
@@ -111,7 +112,7 @@ public class ExerciseFragment extends BaseFragment {
 
                     @Override
                     public void onError(Throwable e) {
-
+                        showToast("网络错误");
                     }
 
                     @Override
@@ -143,15 +144,18 @@ public class ExerciseFragment extends BaseFragment {
                     ExerciseManager.getInstance().correctTheExerciseTimeInDB(exercise, mDaoId);
                     mDaoId++;
                     UserManager.getInstance().setDaoId(mDaoId);
+
+                    if (checkCanSign(new Date()) && !isDateSign) {
+                        SignManager.getInstance().insertSignDate(Calendar.getInstance(), true);
+                        isDateSign = true;
+                        showToast("今天你已经完成打卡任务!");
+                    }
+
                     ExerciseDaoObject exerciseDaoObject = ExerciseManager.getInstance().getExerciseDaoObject(mDaoId);
                     if (null == exerciseDaoObject) {
                         getData();
                     } else {
                         updateView(ExerciseUtil.converseToExercise(exerciseDaoObject));
-                    }
-                    if (checkCanSign(new Date()) && !isDateSign) {
-                        SignManager.getInstance().insertSignDate(Calendar.getInstance(), true);
-                        isDateSign = true;
                     }
                 }
             }

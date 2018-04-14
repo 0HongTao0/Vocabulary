@@ -4,6 +4,8 @@
     <color name="colorPrimaryDark">#2bbd7e</color>
     <color name="colorAccent">#9fffe0</color>
 
+    <color name="colorRed">#FFFF203A</color>
+
     <color name="black">#FF000000</color>
     <color name="half_transparent_black">#7F000000</color>
     <color name="transparent">#00FFFFFF</color>

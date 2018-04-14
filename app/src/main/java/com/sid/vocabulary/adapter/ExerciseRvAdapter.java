@@ -42,7 +42,11 @@ public class ExerciseRvAdapter extends RecyclerView.Adapter<ExerciseRvAdapter.Ex
                 ExerciseItem exerciseItem = mExerciseItemList.get(exerciseRvViewHolder.getAdapterPosition());
                 Log.d(TAG, "onClick: " + exerciseItem.getTranslation());
                 if (mOnItemClickListener != null) {
-                    mOnItemClickListener.onItemClick(exerciseItem, exerciseItem.isCorrect());
+                    if (exerciseItem.isCorrect()) {
+                        mOnItemClickListener.onItemClick(exerciseItem, exerciseItem.isCorrect());
+                    } else {
+                        exerciseRvViewHolder.itemView.setBackgroundResource(R.drawable.exercise_item_error_bg);
+                    }
                 }
             }
         });
@@ -52,7 +56,7 @@ public class ExerciseRvAdapter extends RecyclerView.Adapter<ExerciseRvAdapter.Ex
     @Override
     public void onBindViewHolder(ExerciseRvViewHolder holder, int position) {
         ExerciseItem exerciseItem = mExerciseItemList.get(position);
-        holder.mTextView.setText(exerciseItem.getTranslation().replaceAll("\n",""));
+        holder.mTextView.setText(exerciseItem.getTranslation().replaceAll("\n", ""));
     }
 
     @Override
@@ -60,7 +64,7 @@ public class ExerciseRvAdapter extends RecyclerView.Adapter<ExerciseRvAdapter.Ex
         return mExerciseItemList == null ? 0 : mExerciseItemList.size();
     }
 
-    public static class ExerciseRvViewHolder extends RecyclerView.ViewHolder {
+    protected static class ExerciseRvViewHolder extends RecyclerView.ViewHolder {
         TextView mTextView;
 
         public ExerciseRvViewHolder(View itemView) {

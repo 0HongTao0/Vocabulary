@@ -45,7 +45,7 @@ public abstract class BaseFragment extends LazyFragment {
      *
      * @param msg
      */
-    private void showToast(String msg) {
+    protected void showToast(String msg) {
         Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
     }
 

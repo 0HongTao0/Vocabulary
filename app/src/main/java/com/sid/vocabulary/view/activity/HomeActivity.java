@@ -13,7 +13,7 @@ import com.sid.vocabulary.common.CommonTabBean;
 import com.sid.vocabulary.common.CommonViewPagerAdapter;
 import com.sid.vocabulary.view.fragment.ExerciseFragment;
 import com.sid.vocabulary.view.fragment.PunchFragment;
-import com.sid.vocabulary.view.fragment.TranslationFragment;
+import com.sid.vocabulary.view.fragment.EnglishNewsFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,9 +35,9 @@ public class HomeActivity extends BaseActivity {
 
     private List<Fragment> mFragmentList;
 
-    private static final int[] SELECTED_ICON = {R.drawable.selected_translate, R.drawable.selected_exercise, R.drawable.selected_punch};
-    private static final int[] UN_SELECTED_ICON = {R.drawable.unselected_translate, R.drawable.unselected_exercise, R.drawable.unselected_punch};
-    private static final String[] TITLES = new String[]{"翻译", "练习", "打卡"};
+    private static final int[] SELECTED_ICON = {R.drawable.selected_english_news, R.drawable.selected_exercise, R.drawable.selected_punch};
+    private static final int[] UN_SELECTED_ICON = {R.drawable.unselected_english_news, R.drawable.unselected_exercise, R.drawable.unselected_punch};
+    private static final String[] TITLES = new String[]{"新闻", "练习", "打卡"};
 
     @Override
     protected int getContentViewId() {
@@ -90,7 +90,7 @@ public class HomeActivity extends BaseActivity {
 
     private void initFragmentList() {
         mFragmentList = new ArrayList<>();
-        mFragmentList.add(TranslationFragment.newInstance());
+        mFragmentList.add(EnglishNewsFragment.newInstance());
         mFragmentList.add(ExerciseFragment.newInstance());
         mFragmentList.add(PunchFragment.newInstance());
     }
